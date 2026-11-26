@@ -115,6 +115,8 @@ RUN if [ "$LEARNHOUSE_PUBLIC" = "true" ]; then rm -rf /app/api/ee; fi
 # Collab server: copy built JS + production deps
 WORKDIR /app/collab
 COPY --from=collab-builder /app/dist ./dist
+# Own Enterprise-style collab plugin (boards)
+COPY apps/collab/ee ./ee
 COPY apps/collab/package.json apps/collab/bun.lock* ./
 RUN bun install --frozen-lockfile --production
 
