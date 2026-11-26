@@ -60,8 +60,6 @@ apps/web/runtime-config.json
 
 # Enterprise Edition (private repo, overlaid at SaaS build time, symlinked locally)
 # No trailing slash: it must also match a bare symlink (apps/<app>/ee), not just a directory.
-apps/api/ee
-apps/web/ee
 apps/collab/ee
 
 # Claude Code
