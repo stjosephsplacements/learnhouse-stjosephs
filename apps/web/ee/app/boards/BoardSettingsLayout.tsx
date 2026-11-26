@@ -1,6 +1,6 @@
-// OSS stub: boards require Enterprise Edition (their routes 404).
-import { notFound } from 'next/navigation'
+import type { ReactNode } from 'react'
 
-export default function BoardSettingsLayout(_props: { children?: unknown; params?: Promise<any> }): never {
-  notFound()
+// Board settings tabs render their own chrome; the layout only passes children through.
+export default function BoardSettingsLayout({ children }: { children?: ReactNode; params?: Promise<any> }) {
+  return <>{children}</>
 }

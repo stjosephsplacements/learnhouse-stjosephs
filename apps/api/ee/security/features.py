@@ -23,7 +23,7 @@ async def require_boards_feature(
     org_id = None
 
     if "board_uuid" in path_params:
-        from src.db.boards import Board
+        from ee.db.boards import Board
         board_uuid = path_params["board_uuid"]
         statement = select(Board).where(Board.board_uuid == board_uuid)
         board = (await db_session.execute(statement)).scalars().first()
@@ -81,7 +81,7 @@ async def require_playgrounds_feature(
     org_id = None
 
     if "playground_uuid" in path_params:
-        from src.db.playgrounds import Playground
+        from ee.db.playgrounds import Playground
         playground_uuid = path_params["playground_uuid"]
         statement = select(Playground).where(Playground.playground_uuid == playground_uuid)
         playground = (await db_session.execute(statement)).scalars().first()
