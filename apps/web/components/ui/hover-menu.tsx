@@ -24,6 +24,10 @@ const HoverMenu = React.forwardRef<HTMLDivElement, HoverMenuProps>(
     const [position, setPosition] = React.useState<
       { top: number; left: number; right?: undefined } | { top: number; right: number; left?: undefined } | null
     >(null)
+    const flyoutRef = React.useRef<HTMLDivElement | null>(null)
+    // Vertical nudge that keeps the flyout inside the viewport: triggers near
+    // the bottom of the sidebar would otherwise open a menu running off-screen.
+    const [shiftY, setShiftY] = React.useState(0)
     const hoverTimeoutRef = React.useRef<NodeJS.Timeout | null>(null)
     const leaveTimeoutRef = React.useRef<NodeJS.Timeout | null>(null)
 
@@ -85,6 +89,18 @@ const HoverMenu = React.forwardRef<HTMLDivElement, HoverMenuProps>(
     // Don't render portal until we have a position
     const shouldRenderPortal = position !== null
 
+    React.useLayoutEffect(() => {
+      const el = flyoutRef.current
+      if (!position || !el) return
+      const margin = 8
+      const h = Math.min(el.offsetHeight, window.innerHeight - margin * 2)
+      const top = align === "end" ? position.top - h : align === "center" ? position.top - h / 2 : position.top
+      let shift = 0
+      if (top + h > window.innerHeight - margin) shift = window.innerHeight - margin - (top + h)
+      if (top + shift < margin) shift = margin - top
+      setShiftY(shift)
+    }, [position, isHovered, content, align])
+
     return (
       <>
         <div
@@ -97,14 +113,20 @@ const HoverMenu = React.forwardRef<HTMLDivElement, HoverMenuProps>(
         {shouldRenderPortal && (
           <Portal.Root>
             <div
-              ref={ref}
+              ref={(node) => {
+                flyoutRef.current = node
+                if (typeof ref === "function") ref(node)
+                else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node
+              }}
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
               style={{
                 position: 'fixed',
                 top: position.top,
                 ...(position.left !== undefined ? { left: position.left } : { right: position.right }),
-                transform: align === "end" ? "translateY(-100%)" : align === "center" ? "translateY(-50%)" : undefined,
+                transform: `translateY(calc(${align === "end" ? "-100%" : align === "center" ? "-50%" : "0px"} + ${shiftY}px))`,
+                maxHeight: "calc(100vh - 16px)",
+                overflowY: "auto",
               }}
               className={cn(
                 "z-modal-backdrop pointer-events-none transition-opacity duration-150",
