@@ -20,12 +20,25 @@ from ee.db.live_sessions import LiveSession
 from src.db.organizations import Organization
 from src.db.trail_runs import TrailRun
 from src.db.users import User
-from src.services.users.emails import (
-    LOGO_SVG,
-    STYLES,
-    _email_layout,
-    _send_notification_email,
-)
+from src.services.email.transport import send_message
+
+LOGO_SVG = ""
+STYLES = {
+    "h1": "font-size:22px;font-weight:600;margin:0 0 16px 0;color:#111",
+    "p": "font-size:15px;line-height:1.6;margin:0 0 14px 0;color:#333",
+    "button": "display:inline-block;background:#111;color:#fff;text-decoration:none;padding:10px 18px;border-radius:8px;font-weight:600",
+    "link_text": "font-size:12px;color:#777;word-break:break-all",
+}
+
+
+def _email_layout(title: str, body_content: str, footer_note: str = "", logo_html: str = "") -> str:
+    """Plain, self-contained HTML wrapper (core's block email framework is not needed for these two mails)."""
+    return (f'<div style="font-family:system-ui,sans-serif;max-width:560px;margin:0 auto;padding:24px">{logo_html}{body_content}'
+            f'<p style="font-size:12px;color:#888;margin-top:28px">{footer_note}</p></div>')
+
+
+def _send_notification_email(to: str, subject: str, body: str):
+    return send_message(to=to, subject=subject, body=body)
 
 logger = logging.getLogger(__name__)
 

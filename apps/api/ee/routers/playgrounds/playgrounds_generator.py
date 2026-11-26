@@ -13,7 +13,7 @@ from src.core.events.database import get_db_session
 from src.db.users import PublicUser, AnonymousUser, APITokenUser
 from src.security.auth import get_current_user, resolve_acting_user_id
 from src.security.features_utils.usage import reserve_ai_credit
-from src.security.features_utils.dependencies import require_playgrounds_feature
+from ee.security.features import require_playgrounds_feature
 from src.services.ai.llm import model_for_tier
 from ee.services.playgrounds.playgrounds_generator import (
     get_playground_session,

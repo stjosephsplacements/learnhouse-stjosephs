@@ -7,7 +7,7 @@ from ee.db.playgrounds import PlaygroundCreate, PlaygroundRead, PlaygroundUpdate
 from ee.db.playground_reactions import PlaygroundReactionSummary
 from src.db.users import PublicUser, AnonymousUser
 from src.security.auth import get_current_user
-from src.security.features_utils.dependencies import require_playgrounds_feature
+from ee.security.features import require_playgrounds_feature
 from ee.services.playgrounds.playgrounds import (
     create_playground,
     get_playground,

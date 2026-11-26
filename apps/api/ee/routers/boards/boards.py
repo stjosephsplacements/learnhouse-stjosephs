@@ -15,7 +15,7 @@ from ee.db.boards import (
 )
 from src.db.users import PublicUser
 from src.security.auth import get_current_user
-from src.security.features_utils.dependencies import require_boards_feature
+from ee.security.features import require_boards_feature
 from ee.services.boards.boards import (
     create_board,
     get_board,

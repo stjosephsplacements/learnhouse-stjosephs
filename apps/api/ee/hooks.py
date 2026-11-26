@@ -20,3 +20,13 @@ def register_routers(v1_router):
     v1_router.include_router(boards_playground.router, prefix="/boards", tags=["boards", "boards-playground"], dependencies=[Depends(require_authenticated_user)])
     v1_router.include_router(playgrounds.router, prefix="/playgrounds", tags=["playgrounds"], dependencies=[Depends(require_authenticated_user)])
     v1_router.include_router(playgrounds_generator.router, prefix="/playgrounds", tags=["playgrounds", "playgrounds-generator"], dependencies=[Depends(require_authenticated_user)])
+
+
+def is_license_active() -> bool:
+    """Self-hosted deployment owned by St. Joseph's: the extras are enabled."""
+    return True
+
+
+def is_feature_licensed(feature: str) -> bool:
+    """Everything except Payments."""
+    return feature != "payments"
